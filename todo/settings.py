@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#eh$1)$dvv0n5&=hn98_=-7kf1!w94edh(34b2n6ry0mc^8vw+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['listmaker.pythonanywhere.com']
 
 
 # Application definition
@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'todo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tododb',
-        'USER': 'postgres',
-        'PASSWORD': 'Vinayshankar123',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'listmaker$default',
+        'USER': 'listmaker',
+        'PASSWORD': 'vinay123',
+        'HOST': 'listmaker.mysql.pythonanywhere-services.com',
+        'PORT': '3306'
     }
 }
 

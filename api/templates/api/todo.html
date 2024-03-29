@@ -149,7 +149,7 @@
 
       function addTask() {
         const taskInput = document.getElementById("task-input").value;
-        fetch("http://127.0.0.1:8000/api/add-task/", {
+        fetch("https://listmaker.pythonanywhere.com/api/add-task/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -167,7 +167,7 @@
       }
 
       function deleteTask(taskId) {
-        fetch(`http://127.0.0.1:8000/api/delete-task/${taskId}/`, {
+        fetch(`https://listmaker.pythonanywhere.com/api/delete-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -184,7 +184,7 @@
       }
 
       function displayTasks() {
-        fetch("http://127.0.0.1:8000/api/display-tasks/")
+        fetch("https://listmaker.pythonanywhere.com/api/display-tasks/")
           .then((response) => response.json())
           .then((data) => {
             const taskList = document.getElementById("task-list");
@@ -213,7 +213,7 @@
       }
 
       function toggleTask(taskId, checked) {
-        fetch(`http://127.0.0.1:8000/api/toggle-task/${taskId}/`, {
+        fetch(`https://listmaker.pythonanywhere.com/api/toggle-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
