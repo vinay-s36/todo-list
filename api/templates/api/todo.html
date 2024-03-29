@@ -111,8 +111,9 @@
   <body>
     <h1>To-Do List</h1>
     <div id="task-form">
+      <a href="/login/">Log out</a>
       <div class="header">
-        <h2>Add New Task</h2>
+        <h2>Welcome {{ user_email }}</h2>
         <button
           id="toggle-form-btn"
           onclick="toggleForm()"
@@ -122,6 +123,7 @@
         </button>
       </div>
       <form id="new-task-form" class="hidden">
+        {% csrf_token %}
         <label for="task-input">Task:</label>
         <input type="text" id="task-input" required /><br />
         <button type="button" onclick="addTask()">Add Task</button>
@@ -149,12 +151,14 @@
 
       function addTask() {
         const taskInput = document.getElementById("task-input").value;
+        const userId = "{{ user.id }}";
         fetch("https://listmaker.pythonanywhere.com/api/add-task/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            user: userId,
             title: taskInput,
           }),
         })
@@ -184,7 +188,7 @@
       }
 
       function displayTasks() {
-        fetch("https://listmaker.pythonanywhere.com/api/display-tasks/")
+        fetch(`https://listmaker.pythonanywhere.com/api/display-tasks/?user_id={{ user.id }}`)
           .then((response) => response.json())
           .then((data) => {
             const taskList = document.getElementById("task-list");
