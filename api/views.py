@@ -95,7 +95,7 @@ def display_tasks(request):
         if request.user.is_authenticated:
             user_id = request.GET.get('user_id')
             if user_id:
-                tasks = Todo.objects.filter(user=user_id)
+                tasks = Todo.objects.filter(user=user_id).order_by('title')
             else:
                 return Response({"message": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST)
             tasks_serializer = AllTaskSerializer(
