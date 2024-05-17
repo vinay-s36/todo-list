@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Sign Up</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
@@ -71,25 +71,28 @@
   </head>
   <body>
     <div class="form-container">
-      <h2>Login</h2>
-      <form method="post" action="/login/">
+      <h2>Sign Up</h2>
+      <form method="post" action="/signup/">
         {% csrf_token %}
-        <label for="login-email">Email:</label>
-        <input type="text" id="login-email" required name="login-email" /><br />
-        <label for="login-password">Password:</label>
+        <label for="signup-email">Email:</label>
+        <input
+          type="text"
+          id="signup-email"
+          required
+          name="signup-email"
+        /><br />
+        <label for="signup-password">Password:</label>
         <input
           type="password"
-          id="login-password"
+          id="signup-password"
           required
-          name="login-password"
+          name="signup-password"
         /><br />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
-      {% if error %}
-      <p class="error-message" style="color: red">{{ error }}</p>
-      {% endif %}
-      <p class="toggle-btn" onclick="window.location.href = '/signup/'">
-        Don't have an account? <span>Sign up</span>
+      <p style="color: red">{{ message }}</p>
+      <p class="toggle-btn" onclick="window.location.href='/login/'">
+        Already have an account? <span>Login</span>
       </p>
     </div>
   </body>

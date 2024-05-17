@@ -9,13 +9,16 @@ from django.contrib.auth.models import User
 
 
 def home(request):
-    if request.user.is_authenticated:
-        user_id = request.GET.get('user')
-        user = User.objects.get(id=user_id) if user_id else None
-        user_email = (user.email).split('@')[0]
-        return render(request, 'api/todo.html', {'user': user, 'user_email': user_email})
-    else:
-        return redirect('login')
+    try:
+        if request.user.is_authenticated:
+            user_id = request.GET.get('user')
+            user = User.objects.get(id=user_id) if user_id else None
+            user_email = user.email.split('@')[0] if user else None
+            return render(request, 'api/todo.html', {'user': user, 'user_email': user_email})
+        else:
+            return redirect('login')
+    except Exception as e:
+        return render(request, 'api/error.html', {'error': str(e)})
 
 
 def loginpage(request):
@@ -23,20 +26,22 @@ def loginpage(request):
 
 
 def user_login(request):
-    if request.method == 'POST':
-        email = request.POST['login-email']
-        password = request.POST['login-password']
-        user = authenticate(request, username=email, password=password)
-        print(user)
-        if user is not None:
-            auth_login(request, user)
-            request.session['email'] = email
-            request.session.save()
-            redirect_url = f'/todo-list?user={user.id}'
-            return redirect(redirect_url)
-        else:
-            return render(request, 'api/login.html', {'error': 'Invalid credentials'})
-    return render(request, 'api/login.html')
+    try:
+        if request.method == 'POST':
+            email = request.POST['login-email']
+            password = request.POST['login-password']
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                request.session['email'] = email
+                request.session.save()
+                redirect_url = f'/todo-list?user={user.id}'
+                return redirect(redirect_url)
+            else:
+                return render(request, 'api/login.html', {'error': 'Invalid credentials'})
+        return render(request, 'api/login.html')
+    except Exception as e:
+        return render(request, 'api/error.html', {'error': str(e)})
 
 
 def logout(request):
@@ -50,12 +55,17 @@ def logout(request):
 
 def signup(request):
     if request.method == 'POST':
-        email = request.POST['signup-email']
-        password = request.POST['signup-password']
-        user = User.objects.create_user(
-            username=email, email=email, password=password)
+        email = request.POST.get('signup-email')
+        password = request.POST.get('signup-password')
+        if User.objects.filter(username=email).exists():
+            return render(request, 'api/signup.html', {'message': 'User already exists'})
+        try:
+            new_user = User.objects.create_user(
+                username=email, email=email, password=password)
+        except Exception as e:
+            return render(request, 'api/signup.html', {'message': 'Error creating user'})
         return redirect('login')
-    return render(request, 'api/login.html')
+    return render(request, 'api/signup.html')
 
 
 @api_view(['POST'])
