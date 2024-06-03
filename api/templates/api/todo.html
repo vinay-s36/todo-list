@@ -141,8 +141,8 @@
     </div>
 
     <script>
-        const date = new Date();
-        document.querySelector(".date").textContent = date.toDateString();
+      const date = new Date();
+      document.querySelector(".date").textContent = date.toDateString();
 
       function toggleForm() {
         const form = document.getElementById("new-task-form");
@@ -166,7 +166,7 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch("https://listmaker.pythonanywhere.com/api/add-task/", {
+        fetch("http://127.0.0.1:8000/api/add-task/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -189,7 +189,7 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch(`https://listmaker.pythonanywhere.com/api/delete-task/${taskId}/`, {
+        fetch(`http://127.0.0.1:8000/api/delete-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -207,7 +207,7 @@
       }
 
       function displayTasks() {
-        fetch(`https://listmaker.pythonanywhere.com/api/display-tasks/?user_id={{ user.id }}`)
+        fetch(`http://127.0.0.1:8000/api/display-tasks/?user_id={{ user.id }}`)
           .then((response) => response.json())
           .then((data) => {
             const taskList = document.getElementById("task-list");
@@ -239,7 +239,7 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch(`https://listmaker.pythonanywhere.com/api/toggle-task/${taskId}/`, {
+        fetch(`http://127.0.0.1:8000/api/toggle-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
