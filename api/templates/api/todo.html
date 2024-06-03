@@ -106,12 +106,20 @@
       .task-item input[type="checkbox"]:checked + span {
         text-decoration: line-through;
       }
+
+      .header1 {
+        display: flex;
+        justify-content: space-between;
+      }
     </style>
   </head>
   <body>
     <h1>To-Do List</h1>
     <div id="task-form">
-      <a href="/login/">Log out</a>
+      <div class="header1">
+        <a href="/logout/">Log out</a>
+        <span class="date">hello</span>
+      </div>
       <div class="header">
         <h2>Welcome {{ user_email }}</h2>
         <button
@@ -133,6 +141,9 @@
     </div>
 
     <script>
+        const date = new Date();
+        document.querySelector(".date").textContent = date.toDateString();
+
       function toggleForm() {
         const form = document.getElementById("new-task-form");
         const toggleBtn = document.getElementById("toggle-form-btn");
@@ -152,10 +163,14 @@
       function addTask() {
         const taskInput = document.getElementById("task-input").value;
         const userId = "{{ user.id }}";
+        const csrftoken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
         fetch("https://listmaker.pythonanywhere.com/api/add-task/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
           },
           body: JSON.stringify({
             user: userId,
@@ -171,10 +186,14 @@
       }
 
       function deleteTask(taskId) {
+        const csrftoken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
         fetch(`https://listmaker.pythonanywhere.com/api/delete-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
           },
         })
           .then((response) => {
@@ -217,10 +236,14 @@
       }
 
       function toggleTask(taskId, checked) {
+        const csrftoken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
         fetch(`https://listmaker.pythonanywhere.com/api/toggle-task/${taskId}/`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
           },
           body: JSON.stringify({
             completed: checked,
