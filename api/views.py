@@ -11,8 +11,7 @@ from django.contrib.auth.models import User
 def home(request):
     try:
         if request.user.is_authenticated:
-            user_id = request.GET.get('user')
-            user = User.objects.get(id=user_id) if user_id else None
+            user = request.user
             user_email = user.email.split('@')[0] if user else None
             return render(request, 'api/todo.html', {'user': user, 'user_email': user_email})
         else:
@@ -22,7 +21,13 @@ def home(request):
 
 
 def loginpage(request):
-    return render(request, 'api/login.html')
+    try:
+        if request.user.is_authenticated:
+            return redirect('home')
+        else:
+            return render(request, 'api/login.html')
+    except Exception as e:
+        return render(request, 'api/error.html', {'error': str(e)})
 
 
 def user_login(request):
@@ -35,7 +40,7 @@ def user_login(request):
                 auth_login(request, user)
                 request.session['email'] = email
                 request.session.save()
-                redirect_url = f'/todo-list?user={user.id}'
+                redirect_url = '/todo-list'
                 return redirect(redirect_url)
             else:
                 return render(request, 'api/login.html', {'error': 'Invalid credentials'})
@@ -84,7 +89,7 @@ def add_task(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['PUT'])
+@api_view(['DELETE'])
 def delete_task(request, id):
     try:
         if request.user.is_authenticated:
@@ -100,10 +105,9 @@ def delete_task(request, id):
 
 
 @api_view(['GET'])
-def display_tasks(request):
+def display_tasks(request, user_id):
     try:
         if request.user.is_authenticated:
-            user_id = request.GET.get('user_id')
             if user_id:
                 tasks = Todo.objects.filter(user=user_id).order_by('title')
             else:
