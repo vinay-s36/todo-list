@@ -95,7 +95,10 @@
       .header {
         display: flex;
         justify-content: space-between;
-        padding: 10px;
+      }
+
+      #toggle-form-btn {
+        margin-top: 10px;
       }
 
       .header button {
@@ -118,10 +121,10 @@
     <div id="task-form">
       <div class="header1">
         <a href="/logout/">Log out</a>
-        <span class="date">hello</span>
+        <span class="date">date</span>
       </div>
       <div class="header">
-        <h2>Welcome {{ user_email }}</h2>
+        <span></span>
         <button
           id="toggle-form-btn"
           onclick="toggleForm()"
@@ -134,7 +137,13 @@
         {% csrf_token %}
         <label for="task-input">Task:</label>
         <input type="text" id="task-input" required /><br />
-        <button type="button" onclick="addTask()">Add Task</button>
+        <button
+          type="button"
+          style="background-color: green"
+          onclick="addTask()"
+        >
+          Add
+        </button>
       </form>
       <br />
       <div id="task-list"></div>
@@ -166,7 +175,7 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch("http://127.0.0.1:8000/api/add-task/", {
+        fetch("/api/task", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -189,8 +198,8 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch(`http://127.0.0.1:8000/api/delete-task/${taskId}/`, {
-          method: "PUT",
+        fetch(`/api/task/${taskId}`, {
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken,
@@ -207,7 +216,7 @@
       }
 
       function displayTasks() {
-        fetch(`http://127.0.0.1:8000/api/display-tasks/?user_id={{ user.id }}`)
+        fetch(`/api/tasks/{{ user.id }}`)
           .then((response) => response.json())
           .then((data) => {
             const taskList = document.getElementById("task-list");
@@ -239,7 +248,7 @@
         const csrftoken = document.querySelector(
           "[name=csrfmiddlewaretoken]"
         ).value;
-        fetch(`http://127.0.0.1:8000/api/toggle-task/${taskId}/`, {
+        fetch(`/api/toggle-task/${taskId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
